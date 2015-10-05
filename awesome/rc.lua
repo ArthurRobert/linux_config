@@ -1,17 +1,20 @@
 -- Standard awesome library
-
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
 -- Widget and layout library
 local wibox = require("wibox")
+
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -39,7 +42,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+beautiful.init("~/.config/awesome/themes/zenburn/theme.lua")
 --beautiful.init("/usr/share/awesome/awesome/themes/zenburn/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
@@ -253,21 +256,6 @@ kbdcfg.switch = function ()
    os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
 end
 
---Battery
-batterywidget = wibox.widget.textbox()    
-batterywidget:set_text(" | Battery | ")    
-batterywidgettimer = timer({ timeout = 5 })    
-batterywidgettimer:connect_signal("timeout",    
-				  function()    
-				     fh = assert(io.popen("acpi | cut -d, -f 2,3 -", "r"))    
-				     batterywidget:set_text(" |Batt:" .. fh:read("*l") .. " | ")    
-				     fh:close()    
-  end    
-)    
-
-batterywidgettimer:start()
-
-
 screenTimer = timer({ timeout = 5})
 screenTimer:connect_signal("timeout", 
 				function()
@@ -388,7 +376,6 @@ for s = 1, screen.count() do
     right_layout:add(memwidget)
     right_layout:add(cpuwidget)
     right_layout:add(cpugrwidget)
-    right_layout:add(batterywidget)
     right_layout:add(kbdcfg.widget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])

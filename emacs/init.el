@@ -17,10 +17,13 @@
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
+(if (display-graphic-p)
+    (progn
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (menu-bar-mode -1)
+    (scroll-bar-mode -1)))
+
 (setq inhibit-startup-message t)
 (global-font-lock-mode 1)
 ;; (global-hl-line-mode t)                     ; highline the current line 
@@ -99,7 +102,6 @@
 ;; code analyzer, completion
 (require 'gccsense)
 
-
 ;;--flymake--;
 ;; show the compilations errors on the fly
 (require 'flymake)
@@ -115,11 +117,6 @@
 (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
 
 (add-hook 'c++-mode-hook 'flymake-mode)
-
-
-
-
-
 
 ;;--yasnippet--;;
 ;; code completion
@@ -170,9 +167,6 @@
 (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
 
-
-
-
 ;; (autoload 'octave-mode "octave-mode" nil t)
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
@@ -183,3 +177,46 @@
 ;;	    (auto-fill-mode 1)
 ;;	    (if (eq window-system 'x)
 ;;		(font-lock-mode 1))))
+
+;;;; This snippet enables lua-mode
+;; This line is not necessary, if lua-mode.el is already on your load-path
+(add-to-list 'load-path "/path/to/directory/where/lua-mode-el/resides")
+
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+    (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(custom-enabled-themes (quote (jazz)))
+ '(custom-safe-themes
+   (quote
+    ("f4020e085253f630b9dedb0bb2bea7dc574100b7993cac011f94097c4f92fd13" "2c7d743f9bd1ed26656a14274ff5d29ab146c7f3bad89c580acd4d4cc025bd24" "d1b0ea4b52ecbe3fc443a4353113d6532d05783b5d8e09c8c7bc9e69e980482e" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+;; Org-mode
+
+(require 'org-install)
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+
+(setq org-agenda-files (list "~/org/work.org"
+			     "~/org/home.org"))
+
+
+
+(define-globalized-minor-mode my-global-rainbow-mode rainbow-mode
+  (lambda () (rainbow-mode 1)))
+
+(my-global-rainbow-mode 1)
